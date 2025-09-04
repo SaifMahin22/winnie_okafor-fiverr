@@ -1,0 +1,15 @@
+# Please follow the following steps:
+
+# Step 1: Go to the BLS data website (https://www.bls.gov/lau/data.htm)
+
+# Step 2: click on "multi-screen"
+
+# Step 3: select all states or several states at a time 
+
+# Step 4: select "Counties and equivalents"
+
+# Step 5: select all areas shown in the box
+
+# Step 6: select "unemployment rate" 
+
+# Step 7: select "Not Seasonally Adjusted" --> then click on "retrieve data".
