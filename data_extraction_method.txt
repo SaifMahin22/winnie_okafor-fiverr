@@ -1,0 +1,59 @@
+# Data Extraction Methodology
+
+------------------------
+
+## Step 1: County List Extraction
+
+1. Automated Web Navigation
+
+   * A Selenium WebDriver was used to programmatically navigate the Bureau of Labor Statistics (BLS) multi-screen interface.
+   * Each U.S. state (52 options including territories) was iterated, and the "Counties and equivalents" option was selected where available.
+
+2. County Information Retrieval
+
+   * For each state, all county-level entries were extracted from dropdown menus and stored as records (`State`, `County`).
+   * Each county entry was then parsed and structured into:
+
+     * County Code
+     * County Name
+     * County State
+
+3. Data Cleaning & Structuring
+
+   * Extracted values were cleaned (e.g., whitespace removal).
+   * The resulting county list was used as the foundation for further data retrieval.
+
+------------------------
+
+## Step 2: BLS Data Extraction & Processing
+
+1. Series ID Generation
+
+   * Each county’s code was converted into a BLS-compatible series ID using a standardized format (`LAUCN + county_code + 03`).
+   * This ensured compatibility with the BLS SurveyOutputServlet API.
+
+2. Data Retrieval via API
+
+   * A POST request was submitted to the BLS `SurveyOutputServlet` endpoint for each series ID.
+   * Data was requested for the full available time range (1990–2025).
+   * The API response contained county-level labor force and unemployment measures.
+
+3. Catalog Metadata Extraction
+
+   * Each API response included metadata tables (e.g., Area, Area Type, State/Region/Division, Measure, Seasonal adjustment).
+   * These values were parsed using BeautifulSoup and stored alongside time-series data.
+
+4. Time-Series Data Structuring
+
+   * Monthly and yearly values (Jan–Dec per year) were extracted into tabular format using Pandas.
+   * Each dataset was enriched with metadata (`series_id`, `Area`, `Measure`, etc.) for clarity.
+
+5. Batch Processing & Backup
+
+   * Data was fetched iteratively for all counties.
+   * Intermediate backups were saved at fixed intervals to ensure data integrity during long runs.
+
+6. Final Data Consolidation
+
+   * All extracted datasets were combined into a single master dataset.
+   * The final structured output was delivered as 'MASTER_SHEET.xlsx'
